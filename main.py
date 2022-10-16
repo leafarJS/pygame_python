@@ -1,5 +1,5 @@
 import pygame as pg
-import numpy as np
+import random as rd
 import math as mt
 
 #initialize pg
@@ -20,25 +20,34 @@ pg.display.set_icon(icon)
 #player
 player_img  = pg.image.load('./img/player.png')
 
-player_x:float = 370.0
-player_y:float = 500.0
+player_x = 370
+player_y = 500
 
-player_x_change:float = 0.0
+player_x_change = 0
+
+#multiple enemies 
+enemy_img = []
+enemy_x = []
+enemy_y = []
+enemy_x_change = []
+enemy_y_change = []
+num_of_enemies = 6
 
 #enemy
-enemy_img = pg.image.load('./img/enemy.png')
-enemy_x = np.random.uniform(0,735)
-enemy_y = np.random.uniform(50, 150)
+for i in range(num_of_enemies):
+  enemy_img.append(pg.image.load('./img/enemy.png'))
+  enemy_x.append(rd.randint(0,735))
+  enemy_y.append(rd.randint(50, 150))
 
-enemy_x_change:float = 4.0
-enemy_y_change:float = 40.0
+  enemy_x_change.append(4)
+  enemy_y_change.append(40)
 
 #bullet - bala proyectil
 # ready -  you can´t  see the bullet on the screen
 # fire - the bullet is currently moving
 bullet_img = pg.image.load('./img/bullet.png')
-bullet_x:float = 0.0
-bullet_y:float = 400.0
+bullet_x = 0
+bullet_y = 400 
 bullet_x_change = 0
 bullet_y_change = 10 
 bullet_state = "ready"
@@ -52,9 +61,9 @@ def player(x, y):
   screen.blit(player_img,(x,y))
 
 
-def enemy(x, y):
+def enemy(x, y, i):
   #adding enemy into our space invader game
-  screen.blit(enemy_img,(x,y))
+  screen.blit(enemy_img[i],(x,y))
 
 
 def fire_bullet(x,y):
@@ -90,10 +99,10 @@ while running:
       #print("anything keystroke")
       if i.key == pg.K_LEFT:
         #print('arrow left is pressed')
-        player_x_change = -4.0
+        player_x_change = -4
       if i.key == pg.K_RIGHT:
         #print('arrow right is pressed')
-        player_x_change = 4.0
+        player_x_change = 4
         
       if i.key == pg.K_SPACE:
         if bullet_state is "ready":
@@ -105,29 +114,43 @@ while running:
     if i.type == pg.KEYUP:
       if i.key == pg.K_LEFT or i.key == pg.K_RIGHT:
         #print("keystroke has benn released")
-        player_x_change = 0.0
+        player_x_change = 0
   
   
   player_x += player_x_change
   #Adding Boundaries to Our Game
   if player_x <= 0:
-    player_x = 0.0
+    player_x = 0
   elif player_x >= 736:
-    player_x = 736.0
+    player_x = 736
   
-  enemy_x += enemy_x_change
-  #Adding Boundaries to Our enemy
-  #Movement Mechanics of the Enemy Space Invader
-  if enemy_x <= 0:
-    enemy_x_change = 3.0
-    enemy_y += enemy_y_change
-  elif enemy_x >= 736:
-    enemy_x_change = -3.0
-    #enemy_y -= enemy_y_change | bucle
-  
+  for i in range(num_of_enemies):
+    enemy_x[i] += enemy_x_change[i]
+    #Adding Boundaries to Our enemy
+    #Movement Mechanics of the Enemy Space Invader
+    if enemy_x[i] <= 0:
+      enemy_x_change[i] = 3
+      enemy_y[i] += enemy_y_change[i]
+    elif enemy_x[i] >= 736:
+      enemy_x_change[i] = -3
+      #enemy_y -= enemy_y_change | bucle
+    
+    #collision 
+    collision = isCollision(enemy_x[i], enemy_y[i], bullet_x, bullet_y)
+    
+    if collision is True:
+      bullet_y = 480
+      bullet_state = "ready"
+      score += 1
+      enemy_x[i] = rd.randint(0,735)
+      enemy_y[i] = rd.randint(50, 150)
+      print(score) 
+    
+    enemy(enemy_x[i], enemy_y[i], i)
+       
   #multiple shoots 
   if bullet_y <= 0:
-    bullet_y = 480.0
+    bullet_y = 480
     bullet_state = "ready"
   
   # bullet movement 
@@ -135,17 +158,8 @@ while running:
     fire_bullet(bullet_x, bullet_y)
     bullet_y -= bullet_y_change
   
-  #collision 
-  collision = isCollision(enemy_x, enemy_y, bullet_x, bullet_y)
-  
-  if collision is True:
-    bullet_y = 480
-    bullet_state = "ready"
-    score += 1
-    enemy_x = np.random.uniform(0,735)
-    enemy_y = np.random.uniform(50, 150)
-    print(score)
+ 
   
   player(player_x, player_y)
-  enemy(enemy_x, enemy_y)
+
   pg.display.update()
