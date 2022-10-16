@@ -53,7 +53,17 @@ bullet_y_change = 10
 bullet_state = "ready"
 
 #score 
-score  = 0
+score_value  = 0
+#https://www.dafont.com
+font = pg.font.Font('freesansbold.ttf', 32)
+
+text_x = 10
+text_y = 10
+
+#show score in the screen
+def show_score(x, y):
+  score = font.render("Score: " + str(score_value), True, (0,255,0))
+  screen.blit(score, (x, y))
 
 
 def player(x, y):
@@ -141,13 +151,13 @@ while running:
     if collision is True:
       bullet_y = 480
       bullet_state = "ready"
-      score += 1
+      score_value += 1
       enemy_x[i] = rd.randint(0,735)
       enemy_y[i] = rd.randint(50, 150)
-      print(score) 
+      #print(score_value) 
     
     enemy(enemy_x[i], enemy_y[i], i)
-       
+
   #multiple shoots 
   if bullet_y <= 0:
     bullet_y = 480
@@ -158,8 +168,6 @@ while running:
     fire_bullet(bullet_x, bullet_y)
     bullet_y -= bullet_y_change
   
- 
-  
   player(player_x, player_y)
-
+  show_score(text_x, text_y)
   pg.display.update()
