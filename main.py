@@ -32,6 +32,15 @@ enemy_y = np.random.uniform(40, 200)
 enemy_x_change:float = 4.0
 enemy_y_change:float = 40.0
 
+#bullet - bala proyectil
+# ready -  you can´t  see the bullet on the screen
+# fire - the bullet is currently moving
+bullet_img = pg.image.load('./img/bullet.png')
+bullet_x = 0
+bullet_y = 400
+bullet_x_change = 0
+bullet_y_change = 10 
+bullet_state = "ready"
 
 
 
@@ -43,7 +52,13 @@ def player(x, y):
 def enemy(x, y):
   #adding enemy into our space invader game
   screen.blit(enemy_img,(x,y))
-  
+
+
+def fire_bullet(x,y):
+  global bullet_state 
+  bullet_state = "fire"
+  screen.blit(bullet_img,(x + 16, y + 10))
+
 
 #game loop 
 running = True
@@ -66,6 +81,11 @@ while running:
       if i.key == pg.K_RIGHT:
         print('arrow right is pressed')
         player_x_change = 4.0
+        
+      if i.key == pg.K_SPACE:
+        fire_bullet(player_x, bullet_y)
+        print('shoot')
+        
     if i.type == pg.KEYUP:
       if i.key == pg.K_LEFT or i.key == pg.K_RIGHT:
         print("keystroke has benn released")
@@ -89,7 +109,11 @@ while running:
     enemy_x_change = -3.0
     #enemy_y -= enemy_y_change | bucle
   
-     
+  # bullet movement 
+  if bullet_state is "fire":
+    fire_bullet(player_x, bullet_y)
+    bullet_y -= bullet_y_change
+  
   player(player_x, player_y)
   enemy(enemy_x, enemy_y)
   pg.display.update()
