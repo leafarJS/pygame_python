@@ -36,8 +36,8 @@ enemy_y_change:float = 40.0
 # ready -  you can´t  see the bullet on the screen
 # fire - the bullet is currently moving
 bullet_img = pg.image.load('./img/bullet.png')
-bullet_x = 0
-bullet_y = 400
+bullet_x:float = 0.0
+bullet_y:float = 400.0
 bullet_x_change = 0
 bullet_y_change = 10 
 bullet_state = "ready"
@@ -83,8 +83,11 @@ while running:
         player_x_change = 4.0
         
       if i.key == pg.K_SPACE:
-        fire_bullet(player_x, bullet_y)
-        print('shoot')
+        if bullet_state is "ready":
+          # get the current x cordinate of the spaceship
+          bullet_x = player_x
+          fire_bullet(player_x, bullet_y)
+          print('shoot')
         
     if i.type == pg.KEYUP:
       if i.key == pg.K_LEFT or i.key == pg.K_RIGHT:
@@ -95,9 +98,9 @@ while running:
   player_x += player_x_change
   #Adding Boundaries to Our Game
   if player_x <= 0:
-    player_x = 0
+    player_x = 0.0
   elif player_x >= 736:
-    player_x = 736
+    player_x = 736.0
   
   enemy_x += enemy_x_change
   #Adding Boundaries to Our enemy
@@ -109,9 +112,14 @@ while running:
     enemy_x_change = -3.0
     #enemy_y -= enemy_y_change | bucle
   
+  #multiple shoots 
+  if bullet_y <= 0:
+    bullet_y = 480.0
+    bullet_state = "ready"
+  
   # bullet movement 
   if bullet_state is "fire":
-    fire_bullet(player_x, bullet_y)
+    fire_bullet(bullet_x, bullet_y)
     bullet_y -= bullet_y_change
   
   player(player_x, player_y)
