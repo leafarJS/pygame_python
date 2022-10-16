@@ -65,11 +65,20 @@ font = pg.font.Font('freesansbold.ttf', 32)
 text_x = 10
 text_y = 10
 
+#Game Over
+over_font = pg.font.Font('freesansbold.ttf', 64)
+
+
 #show score in the screen
 def show_score(x, y):
   score = font.render("Score: " + str(score_value), True, (0,255,0))
   screen.blit(score, (x, y))
 
+
+def game_over_text():
+  over_text = over_font.render("GAME OVER", True, (0, 255, 0))
+  screen.blit(over_text, (200, 250))
+  
 
 def player(x, y):
   #Adding Images into Our Space Invader Game
@@ -143,6 +152,14 @@ while running:
     player_x = 736
   
   for i in range(num_of_enemies):
+      # Game Over
+    if enemy_y[i] > 440:
+      for j in range(num_of_enemies):
+        enemy_y[j] = 2000
+        game_over_text()
+        break
+    
+    
     enemy_x[i] += enemy_x_change[i]
     #Adding Boundaries to Our enemy
     #Movement Mechanics of the Enemy Space Invader
