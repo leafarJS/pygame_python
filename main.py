@@ -1,5 +1,6 @@
 import pygame as pg
 import numpy as np
+import math as mt
 
 #initialize pg
 pg.init()
@@ -26,8 +27,8 @@ player_x_change:float = 0.0
 
 #enemy
 enemy_img = pg.image.load('./img/enemy.png')
-enemy_x = np.random.uniform(0,800)
-enemy_y = np.random.uniform(40, 200)
+enemy_x = np.random.uniform(0,735)
+enemy_y = np.random.uniform(50, 150)
 
 enemy_x_change:float = 4.0
 enemy_y_change:float = 40.0
@@ -42,6 +43,8 @@ bullet_x_change = 0
 bullet_y_change = 10 
 bullet_state = "ready"
 
+#score 
+score  = 0
 
 
 def player(x, y):
@@ -60,6 +63,16 @@ def fire_bullet(x,y):
   screen.blit(bullet_img,(x + 16, y + 10))
 
 
+def isCollision(enemy_x, enemy_y, bullet_x, bullet_y):
+  #form math distance 
+  distance = mt.sqrt(mt.pow(enemy_x - bullet_x, 2) + (mt.pow(enemy_y -bullet_y, 2)))
+  #print(distance)
+  if distance < 27:
+    return True
+  else:
+    return False
+
+
 #game loop 
 running = True
 while running:
@@ -74,12 +87,12 @@ while running:
   #Movement Mechanics in Game Development 
   # if keystroke is pressed check whether its right or left
     if i.type == pg.KEYDOWN:
-      print("anything keystroke")
+      #print("anything keystroke")
       if i.key == pg.K_LEFT:
-        print('arrow left is pressed')
+        #print('arrow left is pressed')
         player_x_change = -4.0
       if i.key == pg.K_RIGHT:
-        print('arrow right is pressed')
+        #print('arrow right is pressed')
         player_x_change = 4.0
         
       if i.key == pg.K_SPACE:
@@ -87,11 +100,11 @@ while running:
           # get the current x cordinate of the spaceship
           bullet_x = player_x
           fire_bullet(player_x, bullet_y)
-          print('shoot')
+          #print('shoot')
         
     if i.type == pg.KEYUP:
       if i.key == pg.K_LEFT or i.key == pg.K_RIGHT:
-        print("keystroke has benn released")
+        #print("keystroke has benn released")
         player_x_change = 0.0
   
   
@@ -121,6 +134,17 @@ while running:
   if bullet_state is "fire":
     fire_bullet(bullet_x, bullet_y)
     bullet_y -= bullet_y_change
+  
+  #collision 
+  collision = isCollision(enemy_x, enemy_y, bullet_x, bullet_y)
+  
+  if collision is True:
+    bullet_y = 480
+    bullet_state = "ready"
+    score += 1
+    enemy_x = np.random.uniform(0,735)
+    enemy_y = np.random.uniform(50, 150)
+    print(score)
   
   player(player_x, player_y)
   enemy(enemy_x, enemy_y)
