@@ -1,5 +1,4 @@
 import pygame as pg
-import random as rd 
 import numpy as np
 
 #initialize pg
@@ -7,6 +6,10 @@ pg.init()
 
 #create scream 
 screen = pg.display.set_mode((800,600))
+
+#insert background-image
+background = pg.image.load('./img/background.png')
+
 
 #Changing the Title, Logo and Background Color
 pg.display.set_caption("Space Invaders")
@@ -26,7 +29,7 @@ enemy_img = pg.image.load('./img/enemy.png')
 enemy_x = np.random.uniform(0,800)
 enemy_y = np.random.uniform(40, 200)
 
-enemy_x_change:float = 0.3
+enemy_x_change:float = 4.0
 enemy_y_change:float = 40.0
 
 
@@ -46,7 +49,8 @@ def enemy(x, y):
 running = True
 while running:
   
-  screen.fill((0,0,0))
+  #screen.fill((0,0,0))
+  screen.blit(background, (0,0))
   
   for i in pg.event.get():
     if i.type == pg.QUIT:
@@ -58,10 +62,10 @@ while running:
       print("anything keystroke")
       if i.key == pg.K_LEFT:
         print('arrow left is pressed')
-        player_x_change = -0.4
+        player_x_change = -4.0
       if i.key == pg.K_RIGHT:
         print('arrow right is pressed')
-        player_x_change = 0.4
+        player_x_change = 4.0
     if i.type == pg.KEYUP:
       if i.key == pg.K_LEFT or i.key == pg.K_RIGHT:
         print("keystroke has benn released")
@@ -79,10 +83,10 @@ while running:
   #Adding Boundaries to Our enemy
   #Movement Mechanics of the Enemy Space Invader
   if enemy_x <= 0:
-    enemy_x_change = 0.3
+    enemy_x_change = 3.0
     enemy_y += enemy_y_change
   elif enemy_x >= 736:
-    enemy_x_change = -0.3
+    enemy_x_change = -3.0
     #enemy_y -= enemy_y_change | bucle
   
      
