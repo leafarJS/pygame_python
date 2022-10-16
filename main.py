@@ -1,4 +1,6 @@
 import pygame as pg
+import random as rd 
+
 #initialize pg
 pg.init()
 
@@ -18,10 +20,24 @@ player_y:float = 500.0
 
 player_x_change:float = 0.0
 
+#enemy
+enemy_img = pg.image.load('./img/enemy.png')
+enemy_x:int = rd.randint(0, 736)
+enemy_y:int = rd.randint(50, 200)
+
+enemy_x_change:int = 0
+
+
+
+
 def player(x, y):
   #Adding Images into Our Space Invader Game
   screen.blit(player_img,(x,y))
-  
+
+
+def enemy(x, y):
+  #adding enemy into our space invader game
+  screen.blit(enemy_img,(x,y))
   
 
 #game loop 
@@ -59,4 +75,5 @@ while running:
   
       
   player(player_x, player_y)
+  enemy(enemy_x, enemy_y)
   pg.display.update()
