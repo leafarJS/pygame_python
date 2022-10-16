@@ -40,16 +40,23 @@ while running:
       print("anything keystroke")
       if i.key == pg.K_LEFT:
         print('arrow left is pressed')
-        player_x_change = -0.3
+        player_x_change = -0.4
       if i.key == pg.K_RIGHT:
         print('arrow right is pressed')
-        player_x_change = 0.3
+        player_x_change = 0.4
     if i.type == pg.KEYUP:
       if i.key == pg.K_LEFT or i.key == pg.K_RIGHT:
         print("keystroke has benn released")
         player_x_change = 0.0
   
+  
   player_x += player_x_change
+  #Adding Boundaries to Our Game
+  if player_x <= 0:
+    player_x = 0
+  elif player_x >= 736:
+    player_x = 736
+  
       
   player(player_x, player_y)
   pg.display.update()
