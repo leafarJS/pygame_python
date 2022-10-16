@@ -1,5 +1,6 @@
 import pygame as pg
 import random as rd 
+import numpy as np
 
 #initialize pg
 pg.init()
@@ -22,10 +23,11 @@ player_x_change:float = 0.0
 
 #enemy
 enemy_img = pg.image.load('./img/enemy.png')
-enemy_x:int = rd.randint(0, 736)
-enemy_y:int = rd.randint(50, 200)
+enemy_x = np.random.uniform(0,800)
+enemy_y = np.random.uniform(40, 200)
 
-enemy_x_change:int = 0
+enemy_x_change:float = 0.3
+enemy_y_change:float = 40.0
 
 
 
@@ -44,7 +46,7 @@ def enemy(x, y):
 running = True
 while running:
   
-  screen.fill((255,150,0))
+  screen.fill((0,0,0))
   
   for i in pg.event.get():
     if i.type == pg.QUIT:
@@ -73,7 +75,17 @@ while running:
   elif player_x >= 736:
     player_x = 736
   
-      
+  enemy_x += enemy_x_change
+  #Adding Boundaries to Our enemy
+  #Movement Mechanics of the Enemy Space Invader
+  if enemy_x <= 0:
+    enemy_x_change = 0.3
+    enemy_y += enemy_y_change
+  elif enemy_x >= 736:
+    enemy_x_change = -0.3
+    #enemy_y -= enemy_y_change | bucle
+  
+     
   player(player_x, player_y)
   enemy(enemy_x, enemy_y)
   pg.display.update()
