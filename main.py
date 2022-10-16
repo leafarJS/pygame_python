@@ -1,6 +1,7 @@
 import pygame as pg
 import random as rd
 import math as mt
+from pygame import mixer 
 
 #initialize pg
 pg.init()
@@ -10,6 +11,10 @@ screen = pg.display.set_mode((800,600))
 
 #insert background-image
 background = pg.image.load('./img/background.png')
+
+#insert background-sound
+mixer.music.load('./sound/background.wav')
+mixer.music.play(-1)
 
 
 #Changing the Title, Logo and Background Color
@@ -116,6 +121,9 @@ while running:
         
       if i.key == pg.K_SPACE:
         if bullet_state is "ready":
+          #insert sound
+          bullet_sound = mixer.Sound('./sound/laser.wav')
+          bullet_sound.play()
           # get the current x cordinate of the spaceship
           bullet_x = player_x
           fire_bullet(player_x, bullet_y)
@@ -149,6 +157,8 @@ while running:
     collision = isCollision(enemy_x[i], enemy_y[i], bullet_x, bullet_y)
     
     if collision is True:
+      exposition_sound = mixer.Sound('./sound/explosion.wav')
+      exposition_sound.play()
       bullet_y = 480
       bullet_state = "ready"
       score_value += 1
