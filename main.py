@@ -1,21 +1,34 @@
-import pygame
-#initialize pygame
-pygame.init()
+import pygame as pg
+#initialize pg
+pg.init()
 
 #create scream 
-screen = pygame.display.set_mode((800,600))
+screen = pg.display.set_mode((800,600))
 
 #Changing the Title, Logo and Background Color
-pygame.display.set_caption("Space Invaders")
-icon = pygame.image.load('./img/logo.png')
-pygame.display.set_icon(icon)
+pg.display.set_caption("Space Invaders")
+icon = pg.image.load('./img/logo.png')
+pg.display.set_icon(icon)
+
+#player
+player_img  = pg.image.load('./img/player.png')
+
+player_x = 370
+player_y = 500
+
+def player():
+  screen.blit(player_img,( player_x, player_y))
+
 
 #game loop 
 running = True
 while running:
-  for i in pygame.event.get():
-    if i.type == pygame.QUIT:
+  
+  screen.fill((255,0,0))
+  
+  for i in pg.event.get():
+    if i.type == pg.QUIT:
       running = False
       
-  screen.fill((255,0,0))
-  pygame.display.update()
+  player()
+  pg.display.update()
