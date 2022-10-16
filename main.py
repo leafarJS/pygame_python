@@ -16,19 +16,24 @@ player_img  = pg.image.load('./img/player.png')
 player_x = 370
 player_y = 500
 
-def player():
-  screen.blit(player_img,( player_x, player_y))
-
+def player(x, y):
+  #Adding Images into Our Space Invader Game
+  screen.blit(player_img,(x,y))
+  
+  
 
 #game loop 
 running = True
 while running:
   
-  screen.fill((255,0,0))
+  screen.fill((255,150,0))
+  
+  #Movement Mechanics in Game Development
+  player_y -= 0.1
   
   for i in pg.event.get():
     if i.type == pg.QUIT:
       running = False
       
-  player()
+  player(player_x, player_y)
   pg.display.update()
